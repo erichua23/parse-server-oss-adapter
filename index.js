@@ -60,6 +60,8 @@ function OSSAdapter() {
   this._directAccess = options.directAccess;
   this._baseUrl = options.baseUrl;
   this._baseUrlDirect = options.baseUrlDirect;
+  this._ossHost = options.ossHost;
+  this._cdnHost = options.cdnHost;
 
   let ossOptions = {
     accessKeyId: options.accessKey,
@@ -134,6 +136,9 @@ OSSAdapter.prototype.getFileLocation = function (config, filename) {
 
   var url = this._ossClient.signatureUrl(this._bucketPrefix + filename);
   url = url.replace(/^http:/, "https:");//将http替换为https
+  if (this._cdnHost && this._ossHost) {
+    url = url.replace(this._ossHost, this._cdnHost);//将http替换为https
+  }
   //console.log("--------------");
   //console.log(url);
   //console.log("--------------");
